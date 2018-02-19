@@ -56,9 +56,9 @@ function generatePaginationButtons(next, prev) {
     var nextType;
     var prevType;
     if ( next) nextType = next.split("api/");
-    console.log(nextType);
+    // console.log(nextType);
     if (prev) prevType = prev.split("api/");
-    console.log(prevType);
+    // console.log(prevType);
     // If both are available
     if (next && prev) {
         return `<button onclick="writeToDocument('${prevType[1]}')">Previous</button>
@@ -116,7 +116,20 @@ function writeToDocument(type) {
             
         });
         // document.getElementById("data").innerHTML= data;
-        el.innerHTML += `<table>${tableHeaders}${tableRows}</table>${pagination}`;
+        // el.innerHTML += `<table>${tableHeaders}${tableRows}</table>${pagination}`;
+        /**
+         * bug that shows a load of commas at the top of our table 
+         * We're using arrays in our template literals.
+         * 
+         * What happens is when arrays are treated as strings the commas that separate 
+         * the values are are also treated as part of that string so what we're going 
+         * to do is do a dot replace. This takes a regular expression, a pattern to 
+         * identify which parts of the string we want to change.
+         * Replace / comma /g with an empty string. This replaces all of the commas.
+         * */
+    
+        el.innerHTML += `<table>${tableHeaders}${tableRows}</table>${pagination}`.replace(/[, ]/g, "");   
+
     });
 }
 
