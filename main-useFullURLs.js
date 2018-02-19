@@ -1,13 +1,13 @@
-const baseURL = "https://swapi.co/api/";
+// const baseURL = "https://swapi.co/api/";
 
-function getData(type, cb) { // callback function -- this is the answer to the problem that we had with the setTimeout function
+function getData(url, cb) { // callback function -- this is the answer to the problem that we had with the setTimeout function
     var xhr = new XMLHttpRequest(); // Allows us to consume the APIs, methods to open and send connections
     // var data; // to hold returned data NOT NEEDED ANY MORE
     
     // Open connection
     // Pass method we are using -- Get
     // Then the URL
-    xhr.open("GET", baseURL + type); // + "/");
+    xhr.open("GET", url);
     xhr.send();
     
     
@@ -49,33 +49,23 @@ function getTableHeaders(obj) {
 }
 
 function generatePaginationButtons(next, prev) {
-     /** I split the url for the next / previous to extract a type
-     *  I had to check that a url exist first, ie not Null.
-     *  Then pass on the type generated to be connected to the base URL.
-     * */
-    var nextType;
-    var prevType;
-    if ( next) nextType = next.split("api/");
-    console.log(nextType);
-    if (prev) prevType = prev.split("api/");
-    console.log(prevType);
     // If both are available
     if (next && prev) {
-        return `<button onclick="writeToDocument('${prevType[1]}')">Previous</button>
-                <button onclick="writeToDocument('${nextType[1]}')">Next</button>`;
+        return `<button onclick="writeToDocument('${prev}')">Previous</button>
+                <button onclick="writeToDocument('${next}')">Next</button>`;
     } else if (next && !prev) {
-        return `<button onclick="writeToDocument('${nextType[1]}')">Next</button>`;
+        return `<button onclick="writeToDocument('${next}')">Next</button>`;
     } else if (!next && prev) {
-        return `<button onclick="writeToDocument('${prevType[1]}')">Previous</button>`;
+        return `<button onclick="writeToDocument('${prev}')">Previous</button>`;
     }
 }
 
-function writeToDocument(type) {
+function writeToDocument(url) {
     var tableRows = []; // holds each row of data
     var el = document.getElementById("data");
     el.innerHTML = ""; // clear old data
     
-    getData(type, function(data) {
+    getData(url, function(data) {
         console.dir(data);
         var pagination;
         if (data.next || data.previous) {
